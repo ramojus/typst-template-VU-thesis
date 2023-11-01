@@ -189,7 +189,7 @@
   pagebreak()
 
   set par(first-line-indent: 1.5em, justify: true)
-  show par: set block(spacing: 0.7em)
+  show par: set block(spacing: 0.65em)
 
   body
 
