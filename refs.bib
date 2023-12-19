@@ -1,9 +1,22 @@
-@article{netwok2020,
-  title={At-scale impact of the {Net Wok}: A culinarically holistic investigation of distributed dumplings},
-  author={Astley, Rick and Morris, Linda},
-  journal={Armenian Journal of Proceedings},
-  volume={61},
-  pages={192--219},
-  year=2020,
-  publisher={Automatic Publishing Inc.}
+% about entry types:
+% http://mirror.datacenter.by/pub/mirrors/CTAN/macros/latex/contrib/biblatex/doc/biblatex.pdf#subsection.2.1
+
+@article{LTArticle,
+    author = {A. Surname and B. Aurname and C. Burname and D. Curname},
+    title = {Straipsnio pavadinimas},
+    journal = {Žurnalo pavadinimas},
+    year = {2001},
+    volume = {IV},
+    pages = {8-17},
 }
+
+% `note` entry doesn't work -- might be a bug -- use `annode` instead
+@online{onlineArticle,
+    author = {A. Surname and B. Surname and C. Surname},
+    title = {Online publication title},
+    url = {https://example.com/path/to/publication},
+    date = {2004-03-02},
+    urldate = {2015-02-01},
+    annote = {48 KB},
+}
+

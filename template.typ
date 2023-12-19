@@ -1,3 +1,6 @@
+#let text_font_size = 12pt
+#let heading_font_size = 14pt
+
 #let get_supplement(it) = {
   let supplement = it.supplement
 
@@ -37,12 +40,11 @@
   department: "Informatikos",
   city: "Vilnius",
   date: datetime.today(),
-  bibliography_file: none,
   body,
 ) = {
   set document(title: title, author: authors)
 
-  set text(size: 12pt, font: "Linux Libertine", lang: "lt")
+  set text(size: text_font_size, font: "Linux Libertine", lang: "lt")
 
   set page(
     paper: "a4",
@@ -53,8 +55,7 @@
       bottom: 20mm,
     ),
 
-    footer-descent: 1em,
-    footer: locate(loc => {
+    header: locate(loc => {
       let i = counter(page).at(loc).first()
       if i != 1 {
         align(right, [#i])
@@ -69,7 +70,9 @@
     } else {
       v(1.5em, weak: true)
     }
+    set text(heading_font_size, weight: "semibold")
     it
+    set text(text_font_size, weight: "regular")
     v(1em, weak: true)
   }
 
@@ -188,14 +191,9 @@
   outline(title: "Turinys")
   pagebreak()
 
-  set par(first-line-indent: 1.5em, justify: true)
+  set par(first-line-indent: 0.7cm, justify: true)
   show par: set block(spacing: 0.65em)
 
   body
-
-  if bibliography_file != none {
-    pagebreak()
-    bibliography(title: "Literatūros šaltiniai", bibliography_file)
-  }
 }
 

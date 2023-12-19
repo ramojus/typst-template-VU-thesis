@@ -13,14 +13,9 @@
   // department: "Informatikos",
   // city: "Vilnius",
   // date: datetime.today(),
-  bibliography_file: "refs.bib",
 )
 
 #set heading(numbering: none)
-
-//= Santrauka
-//
-//= Summary
 
 = Įvadas
 #lorem(50)
@@ -43,7 +38,7 @@ Likewise a popular integral is
 $ integral_(-oo)^oo e^(-x^2) dif x = sqrt(pi) $
 
 == Pirmo skyriaus poskyris
-Literatūros nuoroda @netwok2020
+Literatūros nuorodos: @LTArticle, @onlineArticle
 
 === Lentelės
 Galima naudoti lenteles kaip @solids lentelė.
@@ -73,5 +68,13 @@ Galima naudoti lenteles kaip @solids lentelė.
 ) <vu-logo>
 
 #set heading(numbering: none)
+
 // = Išvados
+
+#pagebreak()
+#bibliography(title: "Literatūros sąrašas", style: "modified-ieee.csl", "refs.bib")
+
+// #pagebreak()
+// = Priedai
+// #set text(10pt) // priedų šriftas turi būti 10pt
 
