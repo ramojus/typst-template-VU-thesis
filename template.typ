@@ -2,7 +2,7 @@
 #let heading_font_size = 14pt
 
 #let get_supplement(it) = {
-  let supplement = it.supplement
+  let supplement = "pav"
 
   if it.body != none {
     if it.body.func() == image {
@@ -36,26 +36,31 @@
   work_type: "Darbo tipas",
   university: "Vilniaus Universitetas",
   faculty: "Matematikos ir Informatikos",
-  institute: "Informatikos",
   department: "Informatikos",
+  done_by: "",
   city: "Vilnius",
   date: datetime.today(),
   body,
 ) = {
   set document(title: title, author: authors)
 
-  set text(size: text_font_size, font: "Linux Libertine", lang: "lt")
+  set text(
+    size: text_font_size,
+    font: "Linux Libertine",
+    lang: "lt",
+    hyphenate: false,
+  )
 
   set page(
     paper: "a4",
     margin: (
-      top: 20mm,
-      left: 30mm,
-      right: 15mm,
-      bottom: 20mm,
+      top: 3cm,
+      left: 3cm,
+      right: 1.5cm,
+      bottom: 2cm,
     ),
 
-    header: locate(loc => {
+    footer: locate(loc => {
       let i = counter(page).at(loc).first()
       if i != 1 {
         align(right, [#i])
@@ -129,11 +134,9 @@
   }
 
   // Title page
-  align(center, image("vu_logo.png", width: 60pt))
   align(center, upper([
     #university \
     #faculty Fakultetas\
-    #institute Institutas\
     #department Katedra\
   ]))
   v(20%)
@@ -147,7 +150,7 @@
       align: left,
       stroke: white,
       [
-        Atliko:\ 
+        Atliko: #done_by \ 
         #for (i, name) in authors.enumerate() {
           name
           v(1.5em)
@@ -188,12 +191,43 @@
   })
   pagebreak()
 
-  outline(title: "Turinys")
+  // Remove numbering for specific headings
+  show outline.entry: it => {
+    if not repr(it.body).contains("Priedas") or it.at("label", default: none) == <modified-entry> {
+      it // prevent infinite recursion
+    } else {
+      [#outline.entry(
+        it.level,
+        it.element,
+        it.body,
+        [],  // remove fill
+        []  // remove page number
+      ) <modified-entry>]
+    }
+  }
+
+  outline(title: "Turinys", indent: true)
   pagebreak()
 
-  set par(first-line-indent: 0.7cm, justify: true)
-  show par: set block(spacing: 0.65em)
+  // Use commas in decimal numbers
+  show math.equation: it => {
+      show regex("\d+\.\d+"): it => {show ".": {","+h(0pt)}
+          it}
+      it
+  }
+
+  show raw.where(lang: "block"): it => block(
+    fill: rgb("#F0F0F0"),
+    inset: 10pt,
+    radius: 3pt,
+    par(justify: false, leading: 0.6em, text(size: 9pt, it))
+  )
+  set raw(align: left)
+  set par(
+    first-line-indent: 0.7cm,
+    justify: true,
+    leading: 1.07em, // Don't ask why -- seems to match 1.5 spacing in LibreOffice
+  )
 
   body
 }
-

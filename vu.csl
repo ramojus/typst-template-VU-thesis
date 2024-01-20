@@ -41,7 +41,8 @@
       <name>Oliver Couch</name>
       <email>oliver.couch@gmail.com</email>
     </contributor>
-    <category citation-format="label"/>
+    <category citation-format="numeric"/>
+    <category field="engineering"/>
     <category field="generic-base"/>
     <summary>IEEE style as per the 2021 guidelines, V 01.29.2021.</summary>
     <updated>2023-04-18T00:52:46+10:00</updated>
@@ -88,7 +89,6 @@
     <choose>
       <if type="article-journal report" match="any">
         <date variable="issued">
-          <date-part name="month" form="short" suffix=" "/>
           <date-part name="year" form="long"/>
         </date>
       </if>
@@ -99,7 +99,6 @@
       </else-if>
       <else-if type="paper-conference" match="any">
         <date variable="issued">
-          <date-part name="month" form="short"/>
           <date-part name="year" prefix=" "/>
         </date>
       </else-if>
@@ -129,19 +128,20 @@
     </names>
   </macro>
   <macro name="locators">
-    <group delimiter=", ">
+    <group>
+
       <text macro="edition"/>
-      <group delimiter=" ">
-        <text term="volume" form="short"/>
+      <group delimiter=" " font-weight="bold">
         <number variable="volume" form="numeric"/>
       </group>
+
+      <group delimiter=" " prefix="(" suffix=")">
+        <number variable="issue" form="numeric"/>
+      </group>
+
       <group delimiter=" ">
         <number variable="number-of-volumes" form="numeric"/>
         <text term="volume" form="short" plural="true"/>
-      </group>
-      <group delimiter=" ">
-        <text term="issue" form="short"/>
-        <number variable="issue" form="numeric"/>
       </group>
     </group>
   </macro>
@@ -200,14 +200,14 @@
         <choose>
           <if variable="URL">
             <group delimiter=". " prefix=" ">
-              <group delimiter=": ">
-                <text term="accessed" text-case="capitalize-first"/>
-                <date variable="accessed" form="text" delimiter=" "/>
-              </group>
+              <!-- <group delimiter=": "> -->
+                <!-- <text term="accessed" text-case="capitalize-first"/> -->
+                <!-- <date variable="accessed" form="numeric" delimiter="-"/> -->
+              <!-- </group> -->
               <!-- <text term="online" prefix="[" suffix="]" text-case="capitalize-first"/> -->
               <group delimiter=": ">
-                <text term="available at" text-case="capitalize-first"/>
-                <text variable="URL"/>
+                <text value="URL"/>
+                <text variable="URL" text-decoration="underline"/>
               </group>
             </group>
           </if>
@@ -261,7 +261,8 @@
       </if>
       <else>
         <group delimiter=" ">
-          <label variable="page" form="short"/>
+          <!-- FIXME: pp. should be for en, p. for lt -->
+          <text value="pp."/>
           <text variable="page"/>
         </group>
       </else>
@@ -323,11 +324,11 @@
   <!-- Bibliography -->
   <bibliography entry-spacing="0" second-field-align="flush">
     <sort>
-      <key macro="case-insensitive-label" sort="ascending"/>
+      <key variable="citation-label"/>
     </sort>
     <layout>
       <!-- Citation Number -->
-      <text variable="citation-label" prefix="[" suffix="]"/>
+      <text variable="citation-number" prefix="[" suffix="]"/>
       <!-- Author(s) -->
       <text macro="author" suffix=", "/>
       <!-- Rest of Citation -->
@@ -338,8 +339,8 @@
             <text macro="title"/>
             <text variable="container-title" font-style="italic" form="short"/>
             <text macro="locators"/>
-            <text macro="page"/>
             <text macro="issued"/>
+            <text macro="page"/>
             <text macro="status"/>
           </group>
           <choose>
@@ -412,7 +413,6 @@
           <text macro="access"/>
           <text variable="note" prefix=", "/>
           <text variable="annote" prefix=", "/>
-          <date variable="issued" prefix=", " form="text" delimiter=" "/>
         </else-if>
         <else-if type="patent">
           <group delimiter=", ">

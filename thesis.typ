@@ -11,12 +11,12 @@
   // faculty: "Matematikos ir Informatikos",
   // institute: "Informatikos",
   // department: "Informatikos",
+  done_by: "4 kurso studentas",
   // city: "Vilnius",
   // date: datetime.today(),
 )
 
 #set heading(numbering: none)
-
 = Įvadas
 #lorem(50)
 
@@ -68,11 +68,11 @@ Galima naudoti lenteles kaip @solids lentelė.
 ) <vu-logo>
 
 #set heading(numbering: none)
-
-// = Išvados
+= Išvados
+Išveskime
 
 #pagebreak()
-#bibliography(title: "Literatūros sąrašas", style: "modified-ieee.csl", "refs.bib")
+#bibliography(title: "Literatūros sąrašas", style: "vu.csl", "refs.bib")
 
 // #pagebreak()
 // = Priedai
