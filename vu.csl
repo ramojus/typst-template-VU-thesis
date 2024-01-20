@@ -307,7 +307,7 @@
     </choose>
   </macro>
   <macro name="case-insensitive-label">
-    <text variable="citation-label" text-case="lowercase"/>
+    <text variable="citation-label"/>
   </macro>
   <!-- Citation -->
   <citation collapse="citation-number">
@@ -324,7 +324,7 @@
   <!-- Bibliography -->
   <bibliography entry-spacing="0" second-field-align="flush">
     <sort>
-      <key variable="citation-label"/>
+        <key macro="case-insensitive-label"/>
     </sort>
     <layout>
       <!-- Citation Number -->

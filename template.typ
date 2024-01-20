@@ -191,7 +191,7 @@
   })
   pagebreak()
 
-  // Remove numbering for specific headings
+  // Remove page number and dot fill for specific headings
   show outline.entry: it => {
     if not repr(it.body).contains("Priedas") or it.at("label", default: none) == <modified-entry> {
       it // prevent infinite recursion
