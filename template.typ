@@ -226,8 +226,9 @@
   set par(
     first-line-indent: 0.7cm,
     justify: true,
-    leading: 1.07em, // Don't ask why -- seems to match 1.5 spacing in LibreOffice
+    leading: 0.845em, // Matches latex \onehalfspacing
   )
+  show par: set block(spacing: 0.845em)
 
   body
 }
