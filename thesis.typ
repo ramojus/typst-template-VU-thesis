@@ -5,6 +5,7 @@
     "Vardenis Pavardenis",
   ),
   supervisor: "Vardauskas Pavardauskas",
+  reviewer: "Recenzentas Recenzentauskas",
   // title: "Darbo tema",
   // work_type: "Darbo tipas",
   // university: "Vilniaus Universitetas",

@@ -29,10 +29,42 @@
   }
 }
 
+#let get_people_with_signature_fields(authors, done_by, supervisor, reviewer) = {
+  let signature_field = {
+    v(1.2em)
+    h(1.5em)
+    super([(Parašas)])
+    h(1em)
+  }
+
+  v(15%)
+  align(right, {
+    table(
+      columns: 2,
+      align: left,
+      stroke: white,
+
+      [Atliko: #done_by], [],
+      ..for name in authors {(
+          {name}, {signature_field}
+      )},
+      ..if supervisor != none {(
+          [Vadovas:], [],
+          {supervisor}, {signature_field},
+      )},
+      ..if reviewer != none {(
+          [Recenzentas:], [],
+          {reviewer}, {signature_field},
+      )},
+    )
+  })
+}
+
 #let vu_thesis(
   title: "Darbo tema",
   authors: (),
   supervisor: none,
+  reviewer: none,
   work_type: "Darbo tipas",
   university: "Vilniaus Universitetas",
   faculty: "Matematikos ir Informatikos",
@@ -144,46 +176,7 @@
   v(20%)
   align(center, work_type)
   align(center, text(size: 15pt, weight: 700, title))
-
-  v(15%)
-  align(right, {
-    table(
-      columns: 2,
-      align: left,
-      stroke: white,
-      [
-        Atliko: #done_by \ 
-        #for (i, name) in authors.enumerate() {
-          name
-          v(1.5em)
-        }
-      ],
-      [
-        \
-        \
-        #for (i, _) in authors.enumerate() {
-          h(3em)
-          super([(Parašas)])
-          h(4em)
-          v(1.5em)
-        }
-      ],
-      [
-        #if supervisor != none {
-          [Vadovas:\ ]
-          supervisor
-        }
-      ],
-      [
-        \
-        \
-        #h(3em)
-        #super([(Parašas)])
-        #h(1.5em)
-      ],
-    )
-  })
-
+  get_people_with_signature_fields(authors, done_by, supervisor, reviewer)
   align(bottom + center, {
     city
     [\ ]
