@@ -133,6 +133,8 @@
     }
   }
 
+  set bibliography(style: "vu.csl")
+
   // Title page
   align(center, upper([
     #university \

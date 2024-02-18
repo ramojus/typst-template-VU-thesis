@@ -72,7 +72,7 @@ Galima naudoti lenteles kaip @solids lentelė.
 Išveskime
 
 #pagebreak()
-#bibliography(title: "Literatūros sąrašas", style: "vu.csl", "refs.bib")
+#bibliography(title: "Literatūros sąrašas", "refs.bib")
 
 // #pagebreak()
 // = Priedai
