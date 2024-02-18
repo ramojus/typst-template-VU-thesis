@@ -12,7 +12,7 @@
   // faculty: "Matematikos ir Informatikos",
   // institute: "Informatikos",
   // department: "Informatikos",
-  done_by: "4 kurso studentas",
+  done_by: "4 kurso 1 grupės studentas",
   // city: "Vilnius",
   // date: datetime.today(),
 )
@@ -76,6 +76,6 @@ Išveskime
 #bibliography(title: "Literatūros sąrašas", "refs.bib")
 
 // #pagebreak()
-// = Priedai
+// = Priedas Nr. 1
 // #set text(10pt) // priedų šriftas turi būti 10pt
 

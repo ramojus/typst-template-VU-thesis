@@ -1,7 +1,7 @@
 #let text_font_size = 12pt
 #let heading_font_size = 14pt
 
-#let get_supplement(it) = {
+#let get_lt_supplement(it) = {
   let supplement = "pav"
 
   if it.body != none {
@@ -16,8 +16,8 @@
   supplement
 }
 
-#let get_caption(it) = {
-  let supplement = get_supplement(it)
+#let get_lt_caption(it) = {
+  let supplement = get_lt_supplement(it)
   if it.has("caption") {
     if it.numbering != none {
       it.counter.display(it.numbering)
@@ -101,6 +101,7 @@
   )
 
   set heading(numbering: "1.")
+
   show heading: it => {
     if it.level == 1 {
       pagebreak(weak: true)
@@ -114,52 +115,68 @@
   }
 
   set math.equation(numbering: "(1)")
-  show table: it => {
-    set math.equation(numbering: none)
-    it
+  show table: set math.equation(numbering: none)
+
+  // Use commas in decimal numbers
+  show math.equation: it => {
+      show regex("\d+\.\d+"): it => {
+        show ".": {
+          "," + h(0pt)
+        }
+        it
+      }
+      it
   }
 
   show figure: it => {
     set align(center)
-
     v(1.5em, weak: true)
-
-    let gap = v(if it.has("gap") { it.gap } else { 1.5em }, weak: true)
-
-    if it.body.func() != table {
-      it.body
-      gap
-    }
-
-    get_caption(it)
-
-    if it.body.func() == table {
-      gap
-      it.body
-    }
-
+    block({
+      // For tables, caption comes first
+      if it.body.func() != table {
+        it.body
+        v(1.5em, weak: true)
+      }
+      get_lt_caption(it)
+      if it.body.func() == table {
+        v(1.5em, weak: true)
+        it.body
+      }
+    })
     v(1.5em, weak: true)
   }
 
   show ref: it => {
-    if it.element == none {
-      it
+    if it.element == none or it.element.body == none {
+      return it
+    }
+    let ref_counter = none
+    if it.element.func() == figure {
+      ref_counter = counter(figure.where(kind: it.element.body.func()))
     } else if it.element.func() == math.equation {
-      link(it.element.location(), {
-        numbering(
-          it.element.numbering,
-          ..counter(math.equation).at(it.element.location())
-        )
-      })
-    } else if it.element.body == none {
-      it
-    } else if it.element.body.func() == table or it.element.body.func() == image {
-      link(it.element.location(), {
-        numbering(
-          it.element.numbering,
-          ..counter(figure.where(kind: it.element.body.func())).at(it.element.location())
-        )
-      })
+      ref_counter = counter(it.element.func())
+    }
+    // Don't show supplement, only the caption number
+    link(it.element.location(), {
+      numbering(
+        it.element.numbering,
+        ..ref_counter.at(it.element.location())
+      )
+    })
+  }
+
+  // Remove page number and dot fill for specific headings in TOC
+  show outline.entry: it => {
+    if it.at("label", default: none) == <modified-entry> {
+      it // prevent infinite recursion
+    } else if repr(it.body).contains("Priedas") {
+      [#outline.entry(
+        it.level,
+        it.element,
+        it.body,
+        [],  // remove fill
+        []  // remove page number
+      ) <modified-entry>]
     } else {
       it
     }
@@ -186,38 +203,9 @@
   })
   pagebreak()
 
-  // Remove page number and dot fill for specific headings
-  show outline.entry: it => {
-    if not repr(it.body).contains("Priedas") or it.at("label", default: none) == <modified-entry> {
-      it // prevent infinite recursion
-    } else {
-      [#outline.entry(
-        it.level,
-        it.element,
-        it.body,
-        [],  // remove fill
-        []  // remove page number
-      ) <modified-entry>]
-    }
-  }
-
   outline(title: "Turinys", indent: true)
   pagebreak()
 
-  // Use commas in decimal numbers
-  show math.equation: it => {
-      show regex("\d+\.\d+"): it => {show ".": {","+h(0pt)}
-          it}
-      it
-  }
-
-  show raw.where(lang: "block"): it => block(
-    fill: rgb("#F0F0F0"),
-    inset: 10pt,
-    radius: 3pt,
-    par(justify: false, leading: 0.6em, text(size: 9pt, it))
-  )
-  set raw(align: left)
   set par(
     first-line-indent: 0.7cm,
     justify: true,
