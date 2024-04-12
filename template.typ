@@ -60,6 +60,19 @@
   })
 }
 
+// to indent the first real paragraph
+#let follow_with_empty_par(it, line_spacing) = {
+  it
+  let a = par(box())
+  a
+  v(-(measure(a).height + line_spacing))
+}
+
+#let indent_as_first_line(it, first_line_indent) = {
+  set par(first-line-indent: 0pt) // prevent some lists automatically indenting inside box
+  box(inset: (left: first_line_indent), it)
+}
+
 #let vu_thesis(
   title: "Darbo tema",
   authors: (),
@@ -206,12 +219,21 @@
   outline(title: "Turinys", indent: true)
   pagebreak()
 
+  let first_line_indent = 0.7cm
+  let line_spacing = 0.845em // Matches latex \onehalfspacing
   set par(
-    first-line-indent: 0.7cm,
+    first-line-indent: first_line_indent,
     justify: true,
-    leading: 0.845em, // Matches latex \onehalfspacing
+    leading: line_spacing,
   )
-  show par: set block(spacing: 0.845em)
+  show par: set block(spacing: line_spacing) // no extra spacing between paragraphs
+
+  // change how first line indent works
+  show heading: it => follow_with_empty_par(it, line_spacing)
+  show enum: it => follow_with_empty_par(it, line_spacing)
+  show list: it => follow_with_empty_par(it, line_spacing)
+  show enum: it => indent_as_first_line(it, first_line_indent)
+  show list: it => indent_as_first_line(it, first_line_indent)
 
   body
 }
