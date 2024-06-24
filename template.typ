@@ -8,8 +8,11 @@
     if it.body.func() == image {
       supplement = "pav"
     }
-    if it.body.func() == table {
+    else if it.body.func() == table {
       supplement = "lentelė"
+    }
+    else if it.body.func() == raw {
+      supplement = "kodo fragmentas"
     }
   }
 
@@ -65,16 +68,19 @@
   it
   let a = par(box())
   a
-  v(-(measure(a).height + line_spacing))
+  v(-line_spacing)
+  if it.func() == figure {
+    v(0.845em) // it's not the same to just use line_spacing here -- probably a bug
+  }
 }
 
 #let indent_as_first_line(it, first_line_indent) = {
-  set par(first-line-indent: 0pt) // prevent some lists automatically indenting inside box
-  box(inset: (left: first_line_indent), it)
+   block(inset: (left: first_line_indent, right: 0pt, top: 0pt, bottom: 0pt), outset: 0pt, it)
 }
 
 #let vu_thesis(
   title: "Darbo tema",
+  english_title: "Paper title",
   authors: (),
   supervisor: none,
   reviewer: none,
@@ -113,6 +119,9 @@
     })
   )
 
+  set terms(separator: [ -- ])
+  set table(stroke: 0.3pt)
+
   set heading(numbering: "1.")
 
   show heading: it => {
@@ -124,7 +133,7 @@
     set text(heading_font_size, weight: "semibold")
     it
     set text(text_font_size, weight: "regular")
-    v(1em, weak: true)
+    v(1.5em, weak: true)
   }
 
   set math.equation(numbering: "(1)")
@@ -141,9 +150,21 @@
       it
   }
 
+  show raw.where(block: true): it => {
+    set par(justify: false)
+    block(
+      stroke: 0.3pt,
+      breakable: true,
+      inset: 0.5em,
+      it
+    )
+  }
+  show link: it => underline(it)
+
   show figure: it => {
     set align(center)
     v(1.5em, weak: true)
+
     block({
       // For tables, caption comes first
       if it.body.func() != table {
@@ -166,13 +187,19 @@
     let ref_counter = none
     if it.element.func() == figure {
       ref_counter = counter(figure.where(kind: it.element.body.func()))
-    } else if it.element.func() == math.equation {
+    } else {
       ref_counter = counter(it.element.func())
     }
+
+    let elem_numbering = it.element.numbering
+    if elem_numbering == "1.1." {
+      elem_numbering = "1.1"
+    }
+
     // Don't show supplement, only the caption number
     link(it.element.location(), {
       numbering(
-        it.element.numbering,
+        elem_numbering,
         ..ref_counter.at(it.element.location())
       )
     })
@@ -198,6 +225,7 @@
   set bibliography(style: "vu.csl")
 
   // Title page
+  align(center, image("vu_logo.png", width: 60pt))
   align(center, upper([
     #university \
     #faculty Fakultetas\
@@ -206,6 +234,8 @@
   v(20%)
   align(center, work_type)
   align(center, text(size: 15pt, weight: 700, title))
+  v(-0.5em)
+  align(center, text(size: 15pt, [(#english_title)]))
   get_people_with_signature_fields(authors, done_by, supervisor, reviewer)
   align(bottom + center, {
     city
@@ -226,14 +256,16 @@
     justify: true,
     leading: line_spacing,
   )
-  show par: set block(spacing: line_spacing) // no extra spacing between paragraphs
+  set block(spacing: line_spacing) // no extra spacing between paragraphs
 
-  // change how first line indent works
+  // change how first line indent works. First line is not indented by default, that's why the following lines add an empty first line after a bunch of content types.
   show heading: it => follow_with_empty_par(it, line_spacing)
-  show enum: it => follow_with_empty_par(it, line_spacing)
-  show list: it => follow_with_empty_par(it, line_spacing)
   show enum: it => indent_as_first_line(it, first_line_indent)
+  show enum: it => follow_with_empty_par(it, line_spacing)
   show list: it => indent_as_first_line(it, first_line_indent)
+  show list: it => follow_with_empty_par(it, line_spacing)
+  show raw.where(block: true): it => follow_with_empty_par(it, line_spacing)
+  show figure: it => follow_with_empty_par(it, first_line_indent)
 
   body
 }
